@@ -1,0 +1,28 @@
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    width: max-content !important;
+    min-width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table th,
+.table td {
+    padding: 4px 6px !important;
+    border: 1px solid #dee2e6;
+    vertical-align: top;
+}
+
+.wrap {
+    white-space: normal;
+    max-width: 100px;
+    word-break: break-word;
+}
+
+.card-body {
+    padding: 0.5rem !important;
+}

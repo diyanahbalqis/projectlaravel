@@ -1,0 +1,40 @@
+/* Custom styles for the user report page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Light gray background from Bootstrap */
+    padding: 20px;
+}
+
+h1 {
+    color: #007bff; /* Bootstrap primary color */
+    margin-bottom: 20px;
+}
+
+.table-responsive {
+    margin-top: 20px;
+}
+
+/* DataTables button styling (overrides if needed) */
+.dt-buttons {
+    margin-bottom: 10px;
+}
+
+.dt-button {
+    background-color: #007bff !important; /* Match Bootstrap primary */
+    border-color: #007bff !important;
+    color: white !important;
+}
+
+.dt-button:hover {
+    background-color: #0056b3 !important;
+}
+
+/* Print-specific styles (for PDF/print output) */
+@media print {
+    body {
+        background-color: white;
+    }
+    .btn {
+        display: none; /* Hide buttons in print */
+    }
+}
