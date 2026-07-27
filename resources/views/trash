@@ -1,0 +1,1739 @@
+<!-- <!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
+        <title>{{ config('app.name', 'Laravel') }}</title>
+
+        Fonts 
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+         Scripts 
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+            @include('layouts.navigation')
+
+            Page Heading 
+            @isset($header)
+                <header class="bg-white dark:bg-gray-800 shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
+            @endisset
+
+            Page Content 
+            <main>
+                
+            </main>
+        </div>
+    </body>
+</html>  app old-->
+
+<!-- <x-app-layout>
+    
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    {{ __("You're logged in!   nowwww") }}
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout> dashboard old-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('My Profile') }}
+            </h2>
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" 
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </x-slot>
+
+    <div class="container mt-5">
+        <div class="card shadow-sm p-4">
+            <h4 class="mb-3">Welcome, {{ $users->name ?? 'Users' }}</h4>
+
+            <p><strong>Email:</strong> {{ $users->email ?? 'Not provided' }}</p>
+            <p><strong>Phone:</strong> {{ $users->phone ?? 'Not provided' }}</p>
+            <p><strong>Joined:</strong> {{ $users->created_at ? $users->created_at->format('d M Y') : 'N/A' }}</p>
+        </div>
+    </div>
+</x-app-layout>
+</body>
+</html>
+
+
+//setting
+@extends('layouts.app')
+
+@section('title', 'User Profile')
+
+@section('content')
+<div class="container mt-4">
+    <h2 class="mb-4">User Profile</h2>
+
+    <div class="card shadow-sm p-4">
+        <p><strong>Name:</strong> {{ $users->name }}</p>
+        <p><strong>Email:</strong> {{ $users->email }}</p>
+        <p><strong>Phone:</strong> {{ $users->phone ?? 'Not provided' }}</p>
+        <p><strong>Address:</strong> {{ $users->address ?? 'Not provided' }}</p>
+
+        <a href="{{ route('profile.edit') }}" class="btn btn-primary mt-3">
+            <i class="fa-solid fa-pen-to-square"></i> Edit Profile
+        </a>
+    </div>
+</div>
+@endsection
+
+@extends('layouts.app')
+
+@section('title', 'User Profile')
+
+@section('content')
+
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    </head>
+
+
+    <form action="{{ route('profile.update') }}" method="POST">
+    @csrf
+    @method('PUT')
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" class="form-control" value="{{ auth()->user()->name }}">
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" class="form-control" value="{{ auth()->user()->email }}">
+    </div>
+
+    <div class="form-group">
+        <label for="password">New Password</label>
+        <input type="password" name="password" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+@endsection
+
+@extends('layouts.app')
+
+@section('content')
+<div class="container mt-4">
+    <h2>My Notifications</h2>
+
+    @forelse($notifications as $note)
+        <div class="card mb-3 {{ $note->is_read ? 'bg-light' : 'border-primary' }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ $note->title }}</h5>
+                <p class="card-text">{{ $note->message }}</p>
+                <small class="text-muted">{{ $note->created_at->diffForHumans() }}</small>
+
+                @if(!$note->is_read)
+                    <form action="{{ route('notifications.read', $note->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-success">Mark as Read</button>
+                    </form>
+                @endif
+            </div>
+        </div>
+    @empty
+        <p>No notifications yet.</p>
+    @endforelse
+</div>
+@endsection
+//loan controller
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
+
+class ProfileController extends Controller
+{
+    /**
+     * Display the user's profile page.
+     */
+    public function index(): View
+    {
+        $users = Auth::user($id); // single user
+        return view('userinfo.userprofile', compact('users'));
+    }
+
+    /**
+     * Show the form for editing the user's profile.
+     */
+    public function edit(Request $request): View
+    {
+        return view('profile.edit', [
+            'users' => $request->users(),
+        ]);
+    }
+
+    /**
+     * Update the user's profile information.
+     */
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $request->users()->fill($request->validated());
+
+        if ($request->users()->isDirty('email')) {
+            $request->users()->email_verified_at = null;
+        }
+
+        $request->user()->save();
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    /**
+     * Delete the user's account.
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $users = $request->user($id);
+
+        Auth::logout();
+
+        $users->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Redirect::to('/');
+    }
+
+    public function showProfile()
+    {
+        if (!auth()->user()->userinfo) {
+            UserInfo::create([
+                'user_id' => auth()->id(),
+                'email'   => auth()->user()->email,
+            ]);
+        }
+
+        return view('profile.show', [
+            'user' => auth()->user()
+        ]);
+    }
+}
+
+//edit page
+@extends('layouts.app')
+
+@section('title', 'Edit Profile')
+
+@section('content')
+<div class="container mt-4">
+
+    <h2>Edit Profile</h2>
+
+    {{-- ✅ Display Validation Errors --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>There were some problems with your input:</strong>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    {{-- ✅ Edit Form --}}
+    <form action="{{ route('userinfo.update', $userinfo->id) }}" method="POST">
+        @csrf
+        @method('PUT')
+
+        <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="name" class="form-control" value="{{ old('name', $userinfo->name) }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email Address</label>
+            <input type="email" name="email" class="form-control" value="{{ old('email', $userinfo->email) }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Phone Number</label>
+            <input type="text" name="phone" class="form-control" value="{{ old('phone', $userinfo->phone) }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Address</label>
+            <textarea name="address" class="form-control"> {{ old('address', $userinfo->address) }}</textarea>
+        </div>
+
+    <button type="submit" class="btn- btn-dark">save</button>
+        
+    </form>
+
+</div>
+@endsection
+
+//admin iindex
+@extends('layouts.app') 
+
+@section('title', 'User List')
+
+@section('content')
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>User List</h2>
+        <div>
+            <a href="{{ route('userinfo.create') }}" class="btn btn-primary">
+                <i class="fa-solid fa-user-plus me-1"></i> Add New User
+            </a>
+            <a href="{{ route('dashboard') }}" class="btn btn-success">
+                <i class="fa-solid fa-house-chimney me-1"></i> Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Created At</th>
+                            <th>File Upload</th>
+                            <th>Image</th>
+                            <th>Action</th>
+                            <th>Status</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($user as $userinfo)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $userinfo->name }}</td>
+                                <td>{{ $userinfo->email }}</td>
+                                <td>{{ $userinfo->phone }}</td>
+                                <td>{{ $userinfo->address }}</td>
+                                <td>{{ $userinfo->created_at->format('d M Y, H:i') }}</td>
+
+                                <td>
+                                    <a href="{{ route('file.index') }}" class="btn btn-info btn-sm mb-1">
+                                        <i class="fa-solid fa-upload me-1"></i> Upload
+                                    </a>
+                                    <a href="{{ route('file.index') }}" class="btn btn-success btn-sm">
+                                        <i class="fa-solid fa-eye me-1"></i> View
+                                    </a>
+                                    
+                                </td>
+
+                                <td>
+                                    <a href="{{ route('images.index') }}" class="btn btn-success btn-sm mb-1">
+                                        <i class="fa-solid fa-image me-1"></i> Upload
+                                    </a>
+                                    <a href="{{ route('images.index') }}" class="btn btn-info btn-sm">
+                                        <i class="fa-solid fa-eye me-1"></i> View
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <a href="{{ route('userinfo.show', $userinfo->id) }}" class="btn btn-success btn-sm mb-1" title="View">
+                                        <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                    </a>
+                                    <a href="{{ route('userinfo.edit', $userinfo->id) }}" class="btn btn-warning btn-sm mb-1" title="Edit">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="text-center">No data available</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('activity_log', function (Blueprint $table) {
+            $table->bigIncrements('id');
+
+            // Spatie default fields
+            $table->string('log_name')->nullable();
+            $table->text('description');
+            $table->nullableMorphs('subject', 'subject');
+            $table->nullableMorphs('causer', 'causer');
+            $table->json('properties')->nullable();
+
+            // Custom fields
+            $table->unsignedBigInteger('user_id'); // NOT NULL, points to users table
+            $table->string('action');              // NOT NULL
+
+            // Timestamps
+            $table->timestamps();
+
+            // Index
+            $table->index('log_name');
+
+            // Foreign key
+            $table->foreign('user_id')->references('id')->on('userinfo')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::connection(config('activitylog.database_connection'))->dropIfExists(config('activitylog.table_name'));
+    }
+};
+
+<?php
+
+use Illuminate\Database\Migrations\Migration; 
+use Illuminate\Database\Schema\Blueprint; 
+use Illuminate\Support\Facades\Schema; 
+
+return new class extends Migration { 
+    /** * Run the migrations. */ 
+    public function up(): void 
+    { 
+        Schema::create('loans', function (Blueprint $table) { 
+            $table->id(); 
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
+            $table->string('purpose'); 
+            $table->string('other_purpose')->nullable(); 
+            $table->string('loan_type'); 
+            $table->string('laptop_number')->nullable(); 
+            $table->string('projector_number')->nullable(); 
+            $table->string('other_equipment')->nullable(); 
+            $table->string('other_equipment_specify')->nullable(); 
+            $table->text('description')->nullable(); 
+            $table->date('loan_date')->nullable(); 
+            $table->date('return_date')->nullable(); 
+            $table->string('status')->default('pending'); 
+            $table->timestamps(); 
+        }); 
+    } 
+    
+    /** * Reverse the migrations. */ 
+    
+    public function down(): void 
+    { 
+        Schema::table('loans', function (Blueprint $table) { 
+            $table->dropColumn(['status', 'loan_date', 'return_date']);
+         }); 
+        } 
+    };
+
+
+    //userinfo controller
+    <!-- <?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Userinfo;
+use App\Models\User;
+use App\Models\ActivityLog;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use App\Traits\ActivityLogger;
+
+class UserinfoController extends Controller
+{
+    use ActivityLogger;
+
+    public function index()
+    {
+        $user = Auth::user();
+
+        if ($user->role === 'admin') {
+            $users = Userinfo::all();
+        } else {
+            $users = Userinfo::where('user_id', $user->id)->get();
+        }
+
+        return view('userinfo.index', compact('users'));
+    }
+
+    public function create()
+    {
+
+        // $userinfo = Userinfo::findOrFail();
+        // $userinfo = Userinfo::all();
+
+        // $this->logActivity('Create Profile', "Profile created for {$userinfo->name}");
+        return view('userinfo.create');
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
+            'department' => 'nullable|string|max:255',
+            'approval' => 'required|in:pending,approved,rejected',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $data['user_id'] = Auth::id();
+
+        if ($request->hasFile('profile_picture')) {
+            $file = $request->file('profile_picture');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/profile'), $filename);
+            $data['profile_picture'] = $filename;
+        }
+
+        Userinfo::create($data);
+
+
+
+        return redirect()->route('userinfo.index')->with('success', 'User added successfully');
+    }
+
+    public function show($id)
+    {
+
+        $userinfo = Userinfo::findOrFail($id);
+
+        $this->logActivity('View Details', "User view details for {$userinfo->name}");
+
+        return view('userinfo.view', compact('userinfo'));
+    }
+
+    public function edit($id)
+    {
+        $userinfo = Userinfo::findOrFail($id);
+
+        $this->logActivity('Edit data', "Profile edited for {$userinfo->name}");
+
+        return view('userinfo.edit', compact('userinfo'));
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $userinfo = Userinfo::findOrFail($id);
+
+        $data = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'nullable',
+            'address' => 'nullable',
+            'department' => 'nullable',
+            'approval' => 'required|in:pending,approved,rejected',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // Handle profile picture
+        if ($request->hasFile('profile_picture')) {
+            if ($userinfo->profile_picture && file_exists(public_path('uploads/profile/'.$userinfo->profile_picture))) {
+                unlink(public_path('uploads/profile/'.$userinfo->profile_picture));
+            }
+
+            $file = $request->file('profile_picture');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/profile'), $filename);
+
+            $data['profile_picture'] = $filename;
+        }
+
+        // Update userinfo table
+        $userinfo->update($data);
+
+        // Sync email with Users table
+        if ($userinfo->user) {
+            $userinfo->user->update(['email' => $request->email]);
+        }
+
+        // Log activity
+        $this->logActivity('Update Profile', "Profile updated for {$userinfo->name}");
+
+        return redirect()->route('userinfo.index')->with('success', 'User updated successfully!');
+    }
+
+
+    public function destroy($id)
+    {
+
+        // $this->logActivity('deleted data', "User deleted details for {$userinfo->name}");
+        // Add later if needed
+    }
+
+    public function datatable()
+    {
+        $users = Userinfo::all();
+        return view('userinfo.datatable', compact('users'));
+    }
+
+    public function userprofile()
+    {
+        $user = Auth::user();
+        $userinfo = Userinfo::where('user_id', $user->id)->first();
+
+        $this->logActivity('View User profile', "User view user profile for {$userinfo->name}");
+
+        return view('userinfo.userprofile', compact('userinfo'));
+    }
+
+    public function updateApproval(Request $request, $user_id)
+    {
+        $userinfo = UserInfo::findOrFail($user_id);
+        $userinfo->approval = $request->input('approval');
+        $userinfo->save();
+
+        $this->logActivity('Updated Approval', "Admin updated  Approval for {$userinfo->name}");
+
+        return redirect()->back()->with('success', 'Approval status updated successfully!');
+    }
+} -->
+
+
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('activity_log', function (Blueprint $table) {
+            $table->bigIncrements('id');
+
+            // Spatie default fields
+            $table->string('log_name')->nullable();
+            $table->text('description');
+            $table->nullableMorphs('subject', 'subject');
+            $table->nullableMorphs('causer', 'causer');
+            $table->json('properties')->nullable();
+
+            // Custom fields
+            $table->unsignedBigInteger('user_id')->nullable(); // NOT NULL, points to users table
+            $table->string('action')->nullable();              // NOT NULL
+
+            // Timestamps
+            $table->timestamps();
+
+            // Index
+            $table->index('log_name');
+
+            // Foreign key
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::connection(config('activitylog.database_connection'))->dropIfExists(config('activitylog.table_name'));
+    }
+};
+
+<?php
+
+use Illuminate\Database\Migrations\Migration; 
+use Illuminate\Database\Schema\Blueprint; 
+use Illuminate\Support\Facades\Schema; 
+
+return new class extends Migration { 
+    /** * Run the migrations. */ 
+    public function up(): void 
+    { 
+        Schema::create('loans', function (Blueprint $table) { 
+            $table->id(); 
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
+            $table->string('purpose'); 
+            $table->string('other_purpose')->nullable(); 
+            $table->string('loan_type'); 
+            $table->string('laptop_number')->nullable(); 
+            $table->string('projector_number')->nullable(); 
+            $table->string('other_equipment')->nullable(); 
+            $table->string('other_equipment_specify')->nullable(); 
+            $table->text('description')->nullable(); 
+            $table->date('loan_date')->nullable(); 
+            $table->date('return_date')->nullable(); 
+            $table->string('status')->default('pending'); 
+            $table->timestamps(); 
+        }); 
+    } 
+    
+    /** * Reverse the migrations. */ 
+    
+    public function down(): void 
+    { 
+        Schema::table('loans', function (Blueprint $table) { 
+            $table->dropColumn(['status', 'loan_date', 'return_date']);
+         }); 
+        } 
+    };
+
+    <?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('equipment_loans', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('phone')->nullable();
+            $table->string('department')->nullable();
+            $table->string('staff_id')->nullable();
+            $table->string('email')->nullable();
+            $table->string('purpose')->nullable();  
+            $table->string('other_purpose')->nullable(); 
+            $table->string('item')->nullable();  
+            $table->integer('quantity')->nullable();
+            $table->string('asset_no')->nullable();
+            $table->string('serial_no')->nullable();
+            $table->date('date_borrow')->nullable();
+            $table->date('date_return')->nullable();
+            // For loan tracking
+            $table->unsignedBigInteger('admin_id')->nullable();  // who processed
+            $table->unsignedBigInteger('user_id')->nullable();   // borrower (optional)
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('equipment_forms');
+    }
+};
+
+
+<?php
+
+use Illuminate\Database\Migrations\Migration; 
+use Illuminate\Database\Schema\Blueprint; 
+use Illuminate\Support\Facades\Schema; 
+
+return new class extends Migration { 
+    /** * Run the migrations. */ 
+     
+public function up(): void
+    {
+        Schema::create('equipment_loans', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('phone')->nullable();
+            $table->string('department')->nullable();
+            $table->string('staff_id')->nullable();
+            $table->string('email')->nullable();
+            $table->string('purpose')->nullable();  
+            $table->string('other_purpose')->nullable(); 
+            $table->string('item')->nullable();  
+            $table->integer('quantity')->nullable();
+            $table->string('asset_no')->nullable();
+            $table->string('serial_no')->nullable();
+            $table->date('date_borrow')->nullable();
+            $table->date('date_return')->nullable();
+            // For loan tracking
+            $table->unsignedBigInteger('admin_id')->nullable();  // who processed
+            $table->unsignedBigInteger('user_id')->nullable();   // borrower (optional)
+            $table->timestamps();
+        });
+    }
+    /** * Reverse the migrations. */ 
+    
+    public function down(): void 
+    { 
+        Schema::table('loans', function (Blueprint $table) { 
+            $table->dropColumn(['status', 'loan_date', 'return_date']);
+         }); 
+        } 
+    };
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - ICT Equipment Rental</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.25;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.15), transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.15), transparent 50%);
+            z-index: 0;
+        }
+
+        .signin-container {
+            position: relative;
+            z-index: 1;
+            width: 440px;
+            max-width: 90%;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(30px) saturate(180%);
+            border-radius: 24px;
+            padding: 50px 45px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8),
+                        0 0 0 1px rgba(255, 255, 255, 0.08);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .brand-logo {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .brand-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-tagline {
+            color: #888;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #999;
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            color: #d1d5db;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.06);
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12);
+        }
+
+        input::placeholder {
+            color: #555;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .remember-me label {
+            margin: 0;
+            font-size: 14px;
+            color: #aaa;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .forgot-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .forgot-link:hover {
+            color: #8792f5;
+        }
+
+        .signin-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .signin-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .signin-btn:hover::before {
+            left: 100%;
+        }
+
+        .signin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .signin-btn:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 35px 0;
+            gap: 15px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .divider span {
+            color: #666;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .social-signin {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .social-btn {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .signup-prompt {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .signup-prompt a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .signup-prompt a:hover {
+            color: #8792f5;
+        }
+
+        @media (max-width: 480px) {
+            .signin-container {
+                padding: 40px 30px;
+            }
+
+            .social-signin {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signin-container">
+        <div class="brand">
+            <div class="brand-logo">TR</div>
+            <div class="brand-name">TechRent Pro</div>
+            <div class="brand-tagline">Premium ICT Equipment Rental</div>
+        </div>
+
+        <h1>Welcome Back</h1>
+        <p class="subtitle">Sign in to access your account</p>
+
+        <form onsubmit="event.preventDefault(); alert('Sign in functionality would go here!');">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <input type="email" id="email" placeholder="you@example.com" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+            </div>
+
+            <div class="options">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="signin-btn">Sign In</button>
+        </form>
+
+        <div class="divider">
+            <span>or continue with</span>
+        </div>
+
+        <div class="social-signin">
+            <button class="social-btn" onclick="alert('Google sign-in would go here!')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Google
+            </button>
+            <button class="social-btn" onclick="alert('Microsoft sign-in would go here!')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z"/>
+                </svg>
+                Microsoft
+            </button>
+        </div>
+
+        <div class="signup-prompt">
+            Don't have an account?<a href="#">Create one now</a>
+        </div>
+    </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - TechRent Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            animation: slowZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.15), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(118, 75, 162, 0.15), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1), transparent 50%);
+        }
+
+        /* Navigation */
+        nav {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 80px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-signin {
+            background: transparent;
+            color: #fff;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-signin:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-signup {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: calc(100vh - 95px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 80px;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50px;
+            color: #a8b3ff;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #fff 0%, #a8b3ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -2px;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            color: #aaa;
+            line-height: 1.7;
+            margin-bottom: 45px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            box-shadow: 0 10px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 45px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Features Section */
+        .features {
+            position: relative;
+            z-index: 1;
+            padding: 100px 80px;
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(20px);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            padding: 35px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .feature-card p {
+            color: #999;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        /* Stats Section */
+        .stats {
+            position: relative;
+            z-index: 1;
+            padding: 80px 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 20px 30px;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .hero {
+                padding: 40px 30px;
+            }
+
+            h1 {
+                font-size: 42px;
+            }
+
+            .hero-description {
+                font-size: 18px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .cta-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .features {
+                padding: 60px 30px;
+            }
+
+            .stats {
+                padding: 60px 30px;
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+
+    <nav>
+        <div class="logo-section">
+            <div class="logo-icon">TR</div>
+            <div class="logo-text">TechRent Pro</div>
+        </div>
+        <div class="nav-buttons">
+            <a href="#signin" class="nav-btn btn-signin">Sign In</a>
+            <a href="#signup" class="nav-btn btn-signup">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">🚀 Premium ICT Equipment Rental</div>
+            <h1>Rent Professional Tech Equipment with Ease</h1>
+            <p class="hero-description">
+                Access top-tier laptops, projectors, servers, and networking equipment for your business needs. Flexible rental terms, competitive pricing, and 24/7 support.
+            </p>
+            <div class="cta-buttons">
+                <a href="#signin" class="cta-btn btn-primary">
+                    <span>Start Renting Now</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#learn-more" class="cta-btn btn-secondary">Browse Equipment</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stat-item">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Equipment Available</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">1,200+</div>
+            <div class="stat-label">Happy Clients</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Customer Support</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">99.9%</div>
+            <div class="stat-label">Uptime Rate</div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💻</div>
+                <h3>Latest Technology</h3>
+                <p>Access the newest laptops, computers, and devices from top brands like Dell, HP, and Apple.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Fast Delivery</h3>
+                <p>Same-day delivery available for urgent needs. Get your equipment when you need it most.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Fully Insured</h3>
+                <p>All equipment is fully insured and maintained to the highest standards for your peace of mind.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Flexible Pricing</h3>
+                <p>Daily, weekly, or monthly rental options with competitive rates and no hidden fees.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>Tech Support</h3>
+                <p>Expert technical support available 24/7 to help you with setup and troubleshooting.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📦</div>
+                <h3>Bulk Orders</h3>
+                <p>Special rates for corporate clients and bulk equipment rentals for events and projects.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = this.getAttribute('href');
+                
+                // For demonstration, navigate to signin page
+                // In production, you'd link to actual pages
+                if (target === '#signin') {
+                    alert('This would navigate to your sign-in page. Replace this with: window.location.href = "signin.html";');
+                } else if (target === '#signup') {
+                    alert('This would navigate to your sign-up page.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+<form action="{{ route('activity.userlogs') }}" method="GET" 
+          class="mb-3 d-flex align-items-center flex-wrap" style="gap: 10px;">
+        <!-- Search by Name or User ID -->
+        <input type="text" name="search" class="form-control"
+               placeholder="Search by user ID or name"
+               value="{{ request('search') }}" style="max-width: 300px;">
+
+        <!-- Month -->
+        <select name="month" class="form-control" style="max-width: 180px;">
+            <option value="">Select Month</option>
+            @foreach(range(1, 12) as $m)
+                <option value="{{ $m }}" {{ request('month') == $m ? 'selected' : '' }}>
+                    {{ date('F', mktime(0, 0, 0, $m, 1)) }}
+                </option>
+            @endforeach
+        </select>
+
+        <!-- Year -->
+        <select name="year" class="form-control" style="max-width: 180px;">
+            <option value="">Select Year</option>
+            @foreach(range(date('Y'), date('Y') - 5) as $y)
+                <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>
+                    {{ $y }}
+                </option>
+            @endforeach
+        </select>
+
+        <button type="submit" class="btn btn-dark">
+            <i class="fa-solid fa-magnifying-glass"></i> Search
+        </button>
+
+        @if(request('search') || request('month') || request('year'))
+            <a href="{{ route('activity.userlogs') }}" class="btn btn-outline-secondary">
+                <i class="fa-solid fa-rotate-left"></i> Reset
+            </a>
+        @endif
+    </form>

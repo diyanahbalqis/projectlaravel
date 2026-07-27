@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium System Equipment Showcase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/css/avail.css">
+</head>
+<body>
+    <div class="background"></div>
+
+    <!-- Floating Particles -->
+    <script>
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+            document.body.appendChild(particle);
+        }
+    </script>
+
+    <header>
+        <h1>System Equipment</h1>
+        <p class="subtitle">Premium Technology Solutions</p>
+    </header>
+
+    <div class="equipment-grid">
+        <!-- Dell Laptop -->
+        <div class="equipment-card">
+            <div class="status-badge">Available</div>
+            <div class="icon-3d">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="laptopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00f0ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#0066ff;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="40" y="40" width="120" height="80" rx="5" fill="url(#laptopGrad)" />
+                    <rect x="30" y="125" width="140" height="8" rx="2" fill="url(#laptopGrad)" />
+                    <rect x="20" y="133" width="160" height="3" rx="1" fill="#00f0ff" opacity="0.6" />
+                    <rect x="80" y="50" width="40" height="30" fill="#050714" opacity="0.5" />
+                    <circle cx="100" cy="129" r="2" fill="#ffbe0b" />
+                </svg>
+            </div>
+            <h3 class="equipment-name">Dell Laptop</h3>
+            <p class="equipment-category">Computing Device</p>
+            <ul class="equipment-specs">
+                <li>High-performance processor</li>
+                <li>Full HD display</li>
+                <li>Extended battery life</li>
+                <li>Professional grade</li>
+            </ul>
+        </div>
+
+        <!-- HP Computer -->
+        <div class="equipment-card">
+            <div class="status-badge">Available</div>
+            <div class="icon-3d">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff006e;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8b00ff;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="60" y="30" width="80" height="100" rx="3" fill="url(#pcGrad)" />
+                    <rect x="65" y="35" width="70" height="60" fill="#050714" opacity="0.5" />
+                    <circle cx="100" cy="110" r="8" fill="#ffbe0b" />
+                    <rect x="75" y="125" width="50" height="3" rx="1" fill="#00f0ff" opacity="0.6" />
+                    <rect x="50" y="135" width="100" height="30" rx="2" fill="url(#pcGrad)" opacity="0.7" />
+                </svg>
+            </div>
+            <h3 class="equipment-name">HP Computer</h3>
+            <p class="equipment-category">Desktop System</p>
+            <ul class="equipment-specs">
+                <li>Powerful workstation</li>
+                <li>Multi-tasking capable</li>
+                <li>Expandable storage</li>
+                <li>Enterprise reliability</li>
+            </ul>
+        </div>
+
+        <!-- Remote Control -->
+        <div class="equipment-card">
+            <div class="status-badge">Available</div>
+            <div class="icon-3d">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="remoteGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ffbe0b;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff006e;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="70" y="40" width="60" height="120" rx="8" fill="url(#remoteGrad)" />
+                    <circle cx="100" cy="70" r="12" fill="#050714" opacity="0.4" />
+                    <circle cx="85" cy="100" r="6" fill="#050714" opacity="0.4" />
+                    <circle cx="115" cy="100" r="6" fill="#050714" opacity="0.4" />
+                    <circle cx="100" cy="120" r="6" fill="#050714" opacity="0.4" />
+                    <circle cx="85" cy="140" r="6" fill="#050714" opacity="0.4" />
+                    <circle cx="115" cy="140" r="6" fill="#050714" opacity="0.4" />
+                    <rect x="85" y="55" width="30" height="2" fill="#00f0ff" />
+                </svg>
+            </div>
+            <h3 class="equipment-name">Remote Control</h3>
+            <p class="equipment-category">Control Device</p>
+            <ul class="equipment-specs">
+                <li>Universal compatibility</li>
+                <li>Wireless operation</li>
+                <li>Intuitive interface</li>
+                <li>Long-range signal</li>
+            </ul>
+        </div>
+
+        <!-- Projector -->
+        <div class="equipment-card">
+            <div class="status-badge">Available</div>
+            <div class="icon-3d">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="projectorGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#00f0ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00ff88;stop-opacity:1" />
+                        </linearGradient>
+                        <radialGradient id="lightGrad">
+                            <stop offset="0%" style="stop-color:#ffbe0b;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#ffbe0b;stop-opacity:0" />
+                        </radialGradient>
+                    </defs>
+                    <rect x="50" y="70" width="100" height="60" rx="5" fill="url(#projectorGrad)" />
+                    <circle cx="50" cy="100" r="25" fill="url(#projectorGrad)" />
+                    <circle cx="50" cy="100" r="15" fill="#050714" opacity="0.6" />
+                    <polygon points="30,85 10,60 10,140 30,115" fill="url(#lightGrad)" />
+                    <rect x="120" y="85" width="20" height="30" rx="2" fill="#00f0ff" opacity="0.6" />
+                </svg>
+            </div>
+            <h3 class="equipment-name">Projector</h3>
+            <p class="equipment-category">Display System</p>
+            <ul class="equipment-specs">
+                <li>Full HD resolution</li>
+                <li>High brightness output</li>
+                <li>Multiple input options</li>
+                <li>Portable design</li>
+            </ul>
+        </div>
+
+        <!-- HDMI Cable -->
+        <div class="equipment-card">
+            <div class="status-badge">Available</div>
+            <div class="icon-3d">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="hdmiGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#8b00ff;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#ff006e;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8b00ff;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M 30 100 Q 100 80, 170 100" stroke="url(#hdmiGrad)" stroke-width="8" fill="none" stroke-linecap="round"/>
+                    <rect x="20" y="90" width="20" height="20" rx="3" fill="url(#hdmiGrad)" />
+                    <rect x="160" y="90" width="20" height="20" rx="3" fill="url(#hdmiGrad)" />
+                    <rect x="24" y="94" width="12" height="12" fill="#050714" opacity="0.5" />
+                    <rect x="164" y="94" width="12" height="12" fill="#050714" opacity="0.5" />
+                </svg>
+            </div>
+            <h3 class="equipment-name">HDMI Cable</h3>
+            <p class="equipment-category">Connectivity</p>
+            <ul class="equipment-specs">
+                <li>4K support</li>
+                <li>Audio & video transmission</li>
+                <li>Gold-plated connectors</li>
+                <li>Durable construction</li>
+            </ul>
+        </div>
+
+        <!-- VGA Cable -->
+        <div class="equipment-card">
+            <div class="status-badge">Available</div>
+            <div class="icon-3d">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="vgaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#00f0ff;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#ffbe0b;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00f0ff;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M 30 100 Q 100 120, 170 100" stroke="url(#vgaGrad)" stroke-width="8" fill="none" stroke-linecap="round"/>
+                    <rect x="20" y="85" width="25" height="30" rx="3" fill="url(#vgaGrad)" />
+                    <rect x="155" y="85" width="25" height="30" rx="3" fill="url(#vgaGrad)" />
+                    <circle cx="27" cy="95" r="2" fill="#050714" />
+                    <circle cx="38" cy="95" r="2" fill="#050714" />
+                    <circle cx="27" cy="105" r="2" fill="#050714" />
+                    <circle cx="38" cy="105" r="2" fill="#050714" />
+                    <circle cx="162" cy="95" r="2" fill="#050714" />
+                    <circle cx="173" cy="95" r="2" fill="#050714" />
+                    <circle cx="162" cy="105" r="2" fill="#050714" />
+                    <circle cx="173" cy="105" r="2" fill="#050714" />
+                </svg>
+            </div>
+            <h3 class="equipment-name">VGA Cable</h3>
+            <p class="equipment-category">Legacy Connectivity</p>
+            <ul class="equipment-specs">
+                <li>Universal compatibility</li>
+                <li>Reliable video signal</li>
+                <li>Screw-lock connectors</li>
+                <li>Professional grade</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Premium System Equipment — Excellence in Technology</p>
+    </footer>
+
+    <script>
+        // Add hover sound effect simulation (visual feedback)
+        document.querySelectorAll('.equipment-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+        });
+
+        // Parallax effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.equipment-card');
+            const mouseX = e.clientX / window.innerWidth - 0.5;
+            const mouseY = e.clientY / window.innerHeight - 0.5;
+
+            cards.forEach((card, index) => {
+                const depth = (index % 3 + 1) * 10;
+                const moveX = mouseX * depth;
+                const moveY = mouseY * depth;
+                card.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
